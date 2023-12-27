@@ -1,0 +1,8 @@
+LIBRARY	"boilerplate"
+
+EXPORTS
+	Supports
+	Load
+	Unload
+	AmxLoad
+	AmxUnload

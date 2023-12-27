@@ -21,10 +21,16 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void** ppData) {
 }
 
 extern "C" const AMX_NATIVE_INFO native_list[] = {
-    { "CreateDirectory", Natives::Dir },
-    { "Directory_Exists", Natives::DirExists },
-    { "MoveFile", Natives::Mov },
-    { "DeleteDirectory", Natives::DelDir },
+    { "fs_CreateDirectory", Natives::Dir },
+    { "fs_Directory_Exists", Natives::DirExists },
+    { "fs_MoveFile", Natives::Mov },
+    { "fs_DeleteDirectory", Natives::DelDir },
+    { "fs_fopen", Natives::OpenFile },
+    { "fs_fcreate", Natives::CreateFile },
+    { "fs_fdel", Natives::DelFile },
+    { "fs_fexists", Natives::FileExists },
+    { "fs_count", Natives::CountFiles },
+    { "fs_fcopy", Natives::CopyFile },
     { NULL, NULL }
 };
 
@@ -37,6 +43,6 @@ PLUGIN_EXPORT int PLUGIN_CALL Unload() {
 }
 
 PLUGIN_EXPORT int PLUGIN_CALL AmxUnload(AMX* amx) {
-    logprintf("\n\nFilesystem unloaded.");
+    logprintf("\n\nFilesystem unloaded.\n");
     return 1;
 }

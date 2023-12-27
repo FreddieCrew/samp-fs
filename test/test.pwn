@@ -4,12 +4,12 @@
 #include <pcmd> // https://github.com/FreddieCrew/pcmd
 
 main() {
-	print("Hello");
+	print("Test server started");
 }
 
 public OnPlayerCommandPerformed(playerid, cmdtext[], success) {
 	if(!success) {
-		SendClientMessage(playerid, -1, "Invalid command");
+		SendClientMessage(playerid, -1, "Unknown command");
 	}
 	return 1;
 }

@@ -4,7 +4,7 @@
 #include <pcmd> // https://github.com/FreddieCrew/pcmd
 
 main() {
-	print("Test server started");
+	print("Hello");
 }
 
 public OnPlayerCommandPerformed(playerid, cmdtext[], success) {
@@ -61,7 +61,7 @@ CMD:fcreate(playerid, params[]) {
 	
 	if(fs_fexists(path)) return SendClientMessage(playerid, -1, "The file already exists");
 	
-	fs_fcreate(path, ios_base_app);
+	fs_fcreate(path, fs_append);
 	return 1;
 }
 
@@ -97,6 +97,19 @@ CMD:fmov(playerid, params[]) {
 	if (!fs_fexists(path_from)) return SendClientMessage(playerid, -1, "The file does not exist");
 	
 	fs_MoveFile(path_from, path_to);
+	return 1;
+}
+
+CMD:fopen(playerid, params[]) {
+	new path[MAX_PATH];
+	
+	if (sscanf(params, "s[256]", path)) return SendClientMessage(playerid, -1, "/fread [path]");
+	
+	if (!fs_fexists(path)) return SendClientMessage(playerid, -1, "The file does not exist");
+
+	
+	fs_fopen(path, fs_append);
+	SendClientMessage(playerid, -1, "File opened");
 	return 1;
 }
 

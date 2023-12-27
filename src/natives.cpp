@@ -11,6 +11,7 @@ The code here acts as the translation between AMX data types and native types.
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 #include "natives.hpp"
 
@@ -40,7 +41,8 @@ cell AMX_NATIVE_CALL Natives::DelDir(AMX* amx, cell* params) {
 
 	try {
 		retval = params[2] ? static_cast<cell>(fs::remove_all(amx_GetCppString(amx, params[1]))) : static_cast<cell>(fs::remove(amx_GetCppString(amx, params[1])));
-	} catch (const fs::filesystem_error& e) {
+	}
+	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
 	return retval;
@@ -51,7 +53,7 @@ cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	CHECK_PARAMS(2);
 
 	cell retval(-1);
-	
+
 	fs::rename(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
 	retval = 0;
 	return retval;
@@ -82,11 +84,8 @@ cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 		if (addr == nullptr) break;
 
 		if (*addr == 0) mode = mode | std::ios_base::in;
-		else if (*addr == 1) mode = mode | std::ios_base::out;
-		else if (*addr == 2) mode = mode | std::ios_base::ate;
-		else if (*addr == 3) mode = mode | std::ios_base::app;
-		else if (*addr == 4) mode = mode | std::ios_base::trunc;
-		else if (*addr == 5) mode = mode | std::ios_base::binary;
+		else if (*addr == 1) mode = mode | std::ios_base::app;
+		else if (*addr == 2) mode = mode | std::ios_base::binary;
 	}
 
 	handle.open(amx_GetCppString(amx, params[1]), mode);
@@ -113,18 +112,15 @@ cell AMX_NATIVE_CALL Natives::OpenFile(AMX* amx, cell* params) {
 		if (addr == nullptr) break;
 
 		if (*addr == 0) mode = mode | std::ios_base::in;
-		else if (*addr == 1) mode = mode | std::ios_base::out;
-		else if (*addr == 2) mode = mode | std::ios_base::ate;
-		else if (*addr == 3) mode = mode | std::ios_base::app;
-		else if (*addr == 4) mode = mode | std::ios_base::trunc;
-		else if (*addr == 5) mode = mode | std::ios_base::binary;
+		else if (*addr == 1) mode = mode | std::ios_base::app;
+		else if (*addr == 2) mode = mode | std::ios_base::binary;
 	}
 
 	file->open(amx_GetCppString(amx, params[1]), mode);
 
 
-	if(file->is_open()) {
-		return (cell)file;
+	if (file->is_open()) {
+		return reinterpret_cast<cell>(file);
 	}
 
 	delete file;
@@ -148,11 +144,12 @@ cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval{0};
+	cell retval{ 0 };
 
 	try {
 		fs::remove(amx_GetCppString(amx, params[1]));
-	} catch (const fs::filesystem_error& e) {
+	}
+	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
 	return retval;
@@ -160,7 +157,7 @@ cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(params[0] / sizeof(cell));
-	cell retval{0};
+	cell retval{ 0 };
 	fs::copy_options mode{};
 
 	for (size_t i = 3; i <= params[0] / sizeof(cell); i++) {
@@ -184,7 +181,8 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 	try {
 		retval = fs::copy_file(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]), mode);
-	} catch (const fs::filesystem_error& e) {
+	}
+	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
 
@@ -194,7 +192,7 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
-	cell retval{0};
+	cell retval{ 0 };
 
 	try {
 		for (const auto& entry : fs::directory_iterator(amx_GetCppString(amx, params[1]))) {
@@ -202,8 +200,24 @@ cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 				retval++;
 			}
 		}
-	} catch (const fs::filesystem_error& e) {
+	}
+	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
 	return retval;
 }
+
+// W.I.P
+/*
+cell AMX_NATIVE_CALL Natives::CloseFile(AMX* amx, cell* params) {
+	CHECK_PARAMS(1);
+
+	fstream* file = reinterpret_cast<fstream*>(params[1]);
+
+	if (file != nullptr) {
+		file->close();
+		delete file;
+	}
+
+	return 1;
+}*/

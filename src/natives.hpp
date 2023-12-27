@@ -33,6 +33,7 @@ namespace Natives {
 	cell FileExists(AMX* amx, cell* params);
 	cell CountFiles(AMX* amx, cell* params);
 	cell CopyFile(AMX* amx, cell* params);
+	//cell CloseFile(AMX* amx, cell* params); - W.I.P
 }
 
 #endif

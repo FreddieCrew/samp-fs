@@ -31,6 +31,7 @@ extern "C" const AMX_NATIVE_INFO native_list[] = {
     { "fs_fexists", Natives::FileExists },
     { "fs_count", Natives::CountFiles },
     { "fs_fcopy", Natives::CopyFile },
+    //{ "fs_fclose", Natives::CloseFile }, W.I.P
     { NULL, NULL }
 };
 

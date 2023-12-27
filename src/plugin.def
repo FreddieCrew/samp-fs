@@ -1,4 +1,4 @@
-LIBRARY	"boilerplate"
+LIBRARY	"filesystem"
 
 EXPORTS
 	Supports

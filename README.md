@@ -5,8 +5,20 @@ Simple file system for SA-MP
 
 | Name       | Description                    |
 | ---------- | ------------------------------ |
+| fs_read_only      | Open the file in read only mode      |
 | fs_append  | Open the file in append mode   |
 | fs_io      | Open the file in I/O mode      |
+
+# Copy modes
+| Name                  | Description                                                    |
+| --------------------- | -------------------------------------------------------------- |
+| fs_none               | Copies the file in default mode                                |
+| fs_skip_existing      | Skips the copy process if a file with the same name exists in the path |
+| fs_overwrite_existing  | Overwrites the existing file with the new one                  |
+| fs_update_existing    | Updates the previous file in the path if a file with the same name exists |
+| fs_recursive          | Recursively copies subdirectories and their files             |
+| fs_copy_symlinks      | Copies symbolic links (e.g., Windows Shortcuts) without following the link target |
+| fs_skip_symlinks       | Skips symbolic links (e.g., Windows Shortcuts)                 |
 
 # File functions
 
@@ -51,6 +63,7 @@ Simple file system for SA-MP
 | ---------- | ------------------------------ |
 | path_from  | The path where the file is located  |
 | path_to    | The path where the file will be copied to  |
+| CopyMode    | The mode that the file will be copied  |
 
 # Directory functions
 

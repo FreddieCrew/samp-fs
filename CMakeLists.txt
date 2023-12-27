@@ -1,22 +1,27 @@
-include(AMXConfig)
-include(AddSAMPPlugin)
+cmake_minimum_required(VERSION 3.5)
 
-set(SAMP_SDK_ROOT "${PROJECT_SOURCE_DIR}/lib/samp-plugin-sdk")
-find_package(SAMPSDK REQUIRED)
+project(filesystem)
 
-include_directories(
-	${SAMPSDK_INCLUDE_DIR}
-)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/lib/cmake-modules")
 
-add_samp_plugin(filesystem
-	${SAMPSDK_DIR}/amxplugin.cpp
-	${SAMPSDK_DIR}/amxplugin2.cpp
-	${SAMPSDK_DIR}/amx/getch.c
-	common.hpp
-	main.cpp
-	impl.cpp
-	impl.hpp
-	natives.cpp
-	natives.hpp
-	plugin.def
-)
+if(UNIX)
+	set(CMAKE_CXX_FLAGS "-m32 -std=c++17")
+	set(CMAKE_C_FLAGS "-m32")
+	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
+endif()
+
+if(WIN32 AND MVC)
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/bin/debug")
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release")
+endif()
+
+# removes the sprintf warnings from plugin-natives
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin/plugins)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+
+add_subdirectory(src)

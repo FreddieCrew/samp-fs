@@ -15,7 +15,6 @@ if(WIN32 AND MVC)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/bin/release")
 endif()
 
-# removes the sprintf warnings from plugin-natives
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
 set(CMAKE_CXX_STANDARD 17)

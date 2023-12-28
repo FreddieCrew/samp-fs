@@ -48,11 +48,14 @@ cell AMX_NATIVE_CALL Natives::DelDir(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	CHECK_PARAMS(2);
 
-	cell retval(-1);
-
-	fs::rename(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
-	retval = 0;
-	return retval;
+	try {
+		fs::copy(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
+		fs::remove(amx_GetCppString(amx, params[1]));
+	} 
+	catch (const fs::filesystem_error& e) {
+		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
+	}
+	return 0;
 }
 
 cell AMX_NATIVE_CALL Natives::Copy(AMX* amx, cell* params) {

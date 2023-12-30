@@ -96,38 +96,6 @@ cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 	return 0;
 }
 
-/*cell AMX_NATIVE_CALL Natives::OpenFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(params[0] / sizeof(cell));
-
-	fstream* file = new fstream();
-
-
-	std::ios_base::openmode mode{};
-
-	for (size_t i = 2; i <= params[0] / sizeof(cell); i++) {
-		cell* addr = nullptr;
-		amx_GetAddr(amx, params[i], &addr);
-
-		if (addr == nullptr) break;
-
-		if (*addr == 0) mode = mode | std::ios_base::in;
-		else if (*addr == 1) mode = mode | std::ios_base::app;
-		else if (*addr == 2) mode = mode | std::ios_base::binary;
-	}
-
-	file->open(amx_GetCppString(amx, params[1]), mode);
-
-
-	if (file->is_open()) {
-		return reinterpret_cast<cell>(file);
-	}
-
-	delete file;
-
-	logprintf("File couldn't be opened.");
-	return 0;
-}*/
-
 cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 

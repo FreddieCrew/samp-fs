@@ -21,10 +21,10 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void** ppData) {
 }
 
 extern "C" const AMX_NATIVE_INFO native_list[] = {
-    { "fs_CreateDirectory", Natives::Dir },
-    { "fs_Directory_Exists", Natives::DirExists },
-    { "fs_MoveFile", Natives::Mov },
-    { "fs_DeleteDirectory", Natives::DelDir },
+    { "fs_createdir", Natives::Dir },
+    { "fs_dexists", Natives::DirExists },
+    { "fs_fmove", Natives::Mov },
+    { "fs_deldir", Natives::DelDir },
     { "fs_fcreate", Natives::CreateFile },
     { "fs_fdel", Natives::DelFile },
     { "fs_fexists", Natives::FileExists },

@@ -1,4 +1,4 @@
-#include "natives.hpp"
+﻿#include "natives.hpp"
 #include "impl.hpp"
 
 #include <iostream>

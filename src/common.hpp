@@ -1,8 +1,3 @@
-/*
-# common.hpp
-
-This simply contains some AMX pointer definitions and the logprintf typedef.
-*/
 #pragma once
 
 extern void** ppPluginData;

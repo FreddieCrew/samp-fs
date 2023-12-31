@@ -1,14 +1,6 @@
 # samp-fs
 Simple file system for SA-MP
 
-## Open modes
-
-| Name       | Description                           |
-| ---------- | ------------------------------------- |
-| fs_read_only      | Open the file in read-only mode      |
-| fs_append  | Open the file in append mode          |
-| fs_io      | Open the file in I/O mode             |
-
 ## Copy modes
 
 | Name                  | Description                                                    |
@@ -28,44 +20,6 @@ Simple file system for SA-MP
 | Name       | Description                         |
 | ---------- | ----------------------------------- |
 | path       | The path where the file will be created  |
-| openMode   | The mode that the file will be opened     |
-
-### fs_fopen - Opens a file (W.I.P)
-
-| Name       | Description                         |
-| ---------- | ----------------------------------- |
-| path       | The path where the file will be opened  |
-| openMode   | The mode that the file will be opened  |
-| Work In Progress (W.I.P)  | This function is still being worked on, so I don't recommend using it for now |
-
-### fs_fwrite - Writes to a file (W.I.P)
-
-| Name       | Description                         |
-| ---------- | ----------------------------------- |
-| handle     | The file handle                      |
-| content    | The string that will be written to the file  |
-| Work In Progress (W.I.P)  | This function is still being worked on, so I don't recommend using it for now |
-
-### fs_fread - Reads from a file (W.I.P)
-
-| Name       | Description                         |
-| ---------- | ----------------------------------- |
-| handle     | The file handle                      |
-| string     | The string to store the read file content |
-| Work In Progress (W.I.P)  | This function is still being worked on, so I don't recommend using it for now |
-
-### fs_fclose (W.I.P)
-
-| Name       | Description                         |
-| ---------- | ----------------------------------- |
-| handle     | The file handle                      |
-| Work In Progress (W.I.P)  | This function is still being worked on, so I don't recommend using it for now |
-
-### fs_fdel - Deletes a file
-
-| Name       | Description                         |
-| ---------- | ----------------------------------- |
-| path       | The path of the file to be deleted   |
 
 ### fs_fexists - Check if a file exists or not
 

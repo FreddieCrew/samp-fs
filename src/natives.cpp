@@ -2,17 +2,13 @@
 #include "impl.hpp"
 
 #include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
 #include <string>
-#include <map>
+#include <fstream>
 #include <filesystem>
 
 using namespace std;
 namespace fs = std::filesystem;
 
-std::map<cell, std::unique_ptr<std::fstream>> fileHandles;
 
 
 // Directory functions
@@ -111,7 +107,7 @@ cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval{ 0 };
+	cell retval{0};
 
 	try {
 		fs::remove(amx_GetCppString(amx, params[1]));
@@ -159,7 +155,7 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
-	cell retval{ 0 };
+	cell retval{0};
 
 	try {
 		for (const auto& entry : fs::directory_iterator(amx_GetCppString(amx, params[1]))) {
@@ -172,107 +168,4 @@ cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
 	return retval;
-}
-
-cell AMX_NATIVE_CALL Natives::OpenFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(2);
-
-	std::unique_ptr<std::fstream> file = std::make_unique<std::fstream>();
-
-	std::ios_base::openmode mode{};
-
-	for (size_t i = 2; i <= params[0] / sizeof(cell); i++) {
-		cell* addr = nullptr;
-		amx_GetAddr(amx, params[i], &addr);
-
-		if (addr == nullptr) break;
-
-		if (*addr == 0) mode = mode | std::ios_base::in;
-		else if (*addr == 1) mode = mode | std::ios_base::app;
-		else if (*addr == 2) mode = mode | std::ios_base::binary;
-	}
-
-	file->open(amx_GetCppString(amx, params[1]), mode);
-
-	if (file->is_open()) {
-		cell handle = fileHandles.size() + 1;
-		fileHandles[handle] = std::move(file);
-		return handle;
-	}
-	else {
-		logprintf("File couldn't be opened.");
-		return 0;
-	}
-}
-
-cell AMX_NATIVE_CALL Natives::WriteToFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(2);
-
-	cell handle = params[1];
-
-	if (fileHandles.find(handle) != fileHandles.end()) {
-		std::string text = amx_GetCppString(amx, params[2]);
-
-		try {
-			if (!text.empty()) {
-				(*fileHandles[handle]) << text << std::endl;
-				return 1;
-			}
-			else {
-				logprintf("Error: Trying to write an empty string to the file.");
-			}
-		}
-		catch (const std::exception& e) {
-			logprintf("Error writing to file: %s", e.what());
-		}
-	}
-	else {
-		logprintf("Invalid file handle or file is not open.");
-	}
-
-	return 0;
-}
-
-cell AMX_NATIVE_CALL Natives::CloseFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(1);
-
-	cell handle = params[1];
-
-	auto it = fileHandles.find(handle);
-
-	if (it != fileHandles.end()) {
-		it->second->close();
-		fileHandles.erase(it);
-		return 1;
-	}
-	else {
-		logprintf("Invalid file handle or file is not open.");
-	}
-
-	return 0;
-}
-
-
-cell AMX_NATIVE_CALL Natives::ReadFromFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(2);
-
-	cell handle = params[1];
-
-	if (fileHandles.find(handle) != fileHandles.end()) {
-		try {
-			std::string line;
-			std::getline(*fileHandles[handle], line);
-			amx_SetCppString(amx, params[2], line.c_str(), params[3]);
-
-			return 1;
-		}
-		catch (const std::exception& e) {
-			logprintf("Error reading from file: %s", e.what());
-		}
-	}
-	else {
-		logprintf("Invalid file handle or file is not open.");
-	}
-
-	return 0;
 }

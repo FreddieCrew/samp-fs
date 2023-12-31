@@ -25,15 +25,11 @@ extern "C" const AMX_NATIVE_INFO native_list[] = {
     { "fs_Directory_Exists", Natives::DirExists },
     { "fs_MoveFile", Natives::Mov },
     { "fs_DeleteDirectory", Natives::DelDir },
-    { "fs_fopen", Natives::OpenFile },
     { "fs_fcreate", Natives::CreateFile },
     { "fs_fdel", Natives::DelFile },
     { "fs_fexists", Natives::FileExists },
     { "fs_count", Natives::CountFiles },
     { "fs_fcopy", Natives::CopyFile },
-    { "fs_fclose", Natives::CloseFile },
-    { "fs_fwrite", Natives::WriteToFile },
-    { "fs_fread", Natives::ReadFromFile },
     { NULL, NULL }
 };
 

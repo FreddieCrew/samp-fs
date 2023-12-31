@@ -19,15 +19,11 @@ namespace Natives {
 	cell DelDir(AMX* amx, cell* params);
 	cell Mov(AMX* amx, cell* params);
 	cell Copy(AMX* amx, cell* params);
-	cell OpenFile(AMX* amx, cell* params);
 	cell CreateFile(AMX* amx, cell* params);
 	cell DelFile(AMX* amx, cell* params);
 	cell FileExists(AMX* amx, cell* params);
 	cell CountFiles(AMX* amx, cell* params);
 	cell CopyFile(AMX* amx, cell* params);
-	cell CloseFile(AMX* amx, cell* params);
-	cell WriteToFile(AMX* amx, cell* params);
-	cell ReadFromFile(AMX* amx, cell* params);
 }
 
 #endif

@@ -99,20 +99,6 @@ CMD:fmov(playerid, params[]) {
 	fs_MoveFile(path_from, path_to);
 	return 1;
 }
-
-CMD:fopen(playerid, params[]) {
-	new path[MAX_PATH];
-	
-	if (sscanf(params, "s[256]", path)) return SendClientMessage(playerid, -1, "/fread [path]");
-	
-	if (!fs_fexists(path)) return SendClientMessage(playerid, -1, "The file does not exist");
-
-	
-	fs_fopen(path, fs_append);
-	SendClientMessage(playerid, -1, "File opened");
-	return 1;
-}
-
 CMD:fcount(playerid, params[]) {
 	new path[MAX_PATH], string[35];
 	

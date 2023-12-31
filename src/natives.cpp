@@ -1,4 +1,4 @@
-﻿#include "natives.hpp"
+#include "natives.hpp"
 #include "impl.hpp"
 
 #include <iostream>
@@ -47,7 +47,7 @@ cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	try {
 		fs::copy(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
 		fs::remove(amx_GetCppString(amx, params[1]));
-	} 
+	}
 	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
 	}
@@ -65,22 +65,20 @@ cell AMX_NATIVE_CALL Natives::Copy(AMX* amx, cell* params) {
 }
 
 cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
-	CHECK_PARAMS(params[0] / sizeof(cell));
+	CHECK_PARAMS(1);
 
-	std::ios_base::openmode mode{};
+	cell retval{0};
 
-	for (size_t i = 2; i < params[0] / sizeof(cell); i++) {
-		cell* addr = nullptr;
+	std::ofstream file(amx_GetCppString(amx, params[1]));
 
-		amx_GetAddr(amx, params[i], &addr);
-
-		if (addr == nullptr) break;
-
-		if (*addr == 0) mode = mode | std::ios_base::in;
-		else if (*addr == 1) mode = mode | std::ios_base::app;
-		else if (*addr == 2) mode = mode | std::ios_base::binary;
+	if (file.is_open()) {
+		file.close();
+		retval = 1; 
 	}
-	return 0;
+	else {
+		logprintf("[Filesystem]: An error occurred while attempting to create a file at the path %s", amx_GetCppString(amx, params[1]).c_str());
+	}
+	return retval;
 }
 
 cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
@@ -98,7 +96,7 @@ cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval{0};
+	cell retval{ 0 };
 
 	try {
 		fs::remove(amx_GetCppString(amx, params[1]));
@@ -146,7 +144,7 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
-	cell retval{0};
+	cell retval{ 0 };
 
 	try {
 		for (const auto& entry : fs::directory_iterator(amx_GetCppString(amx, params[1]))) {

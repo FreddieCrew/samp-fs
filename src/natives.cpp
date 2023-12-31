@@ -67,8 +67,6 @@ cell AMX_NATIVE_CALL Natives::Copy(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(params[0] / sizeof(cell));
 
-	std::ofstream handle;
-
 	std::ios_base::openmode mode{};
 
 	for (size_t i = 2; i < params[0] / sizeof(cell); i++) {
@@ -81,13 +79,6 @@ cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 		if (*addr == 0) mode = mode | std::ios_base::in;
 		else if (*addr == 1) mode = mode | std::ios_base::app;
 		else if (*addr == 2) mode = mode | std::ios_base::binary;
-	}
-
-	handle.open(amx_GetCppString(amx, params[1]), mode);
-
-	if (handle.is_open()) {
-		handle.close();
-		return 1;
 	}
 	return 0;
 }

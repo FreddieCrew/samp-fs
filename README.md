@@ -35,7 +35,7 @@ Simple file system for SA-MP
 | path       | The path where the folder is located |
 | Returns    | The number of files in the specified folder |
 
-### fs_MoveFile - Moves a file from directory A to directory B
+### fs_fmove - Moves a file from directory A to directory B
 
 | Name       | Description                         |
 | ---------- | ----------------------------------- |
@@ -52,20 +52,20 @@ Simple file system for SA-MP
 
 ## Directory functions
 
-### fs_CreateDirectory - Creates a folder/directory in the desired path
+### fs_createdir - Creates a folder/directory in the desired path
 
 | Name       | Description                         |
 | ---------- | ----------------------------------- |
 | path       | The path where the directory will be created  |
 
-### fs_Directory_Exists - Check if a folder/directory exists or not
+### fs_dexists - Check if a folder/directory exists or not
 
 | Name       | Description                         |
 | ---------- | ----------------------------------- |
 | path       | The path where the directory is located   |
 | Returns    | false if the directory does not exist, and true if the directory exists |
 
-### fs_DeleteDirectory - Deletes a folder/directory
+### fs_deldir - Deletes a folder/directory
 
 | Name       | Description                         |
 | ---------- | ----------------------------------- |

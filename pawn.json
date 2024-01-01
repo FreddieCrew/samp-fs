@@ -1,0 +1,16 @@
+{
+    "user": "FreddieCrew",
+    "repo": "samp-fs",
+    "resources": [
+        {
+            "name": "^filesystem.zip$",
+            "platform": "windows",
+            "archive": true,
+            "includes": ["pawno/include"],
+            "plugins": ["plugins/filesystem.dll"]
+        }
+    ],
+    "runtime": {
+        "plugins": ["FreddieCrew/samp-fs"]
+    }
+}

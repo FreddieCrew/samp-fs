@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PROJECTNAME_NATIVES_H
-#define PROJECTNAME_NATIVES_H
+#ifndef FS_NATIVES_H
+#define FS_NATIVES_H
 
 #include <amx/amx2.h>
 

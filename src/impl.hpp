@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PROJECTNAME_IMPL_H
-#define PROJECTNAME_IMPL_H
+#ifndef FS_IMPL_H
+#define FS_IMPL_H
 
 namespace Impl {
 };

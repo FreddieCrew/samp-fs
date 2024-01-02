@@ -1,5 +1,5 @@
 # samp-fs
-A simple file system plugin for SA-MP that provides several useful functions to handle files and directories on Pawn, in a more convenient and comprehensive way.
+A simple file system addon for SA-MP that provides several useful functions to handle files and directories on Pawn, in a more convenient and comprehensive way.
 
 ## Copy modes
 

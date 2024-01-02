@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 cell AMX_NATIVE_CALL Natives::Dir(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval;
+	cell retval(0);
 
 	retval = fs::create_directory(amx_GetCppString(amx, params[1]));
 	return retval;
@@ -23,7 +23,11 @@ cell AMX_NATIVE_CALL Natives::Dir(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::DirExists(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
-	return fs::exists(amx_GetCppString(amx, params[1]));
+
+	cell retval(0);
+
+	retval = fs::is_directory(amx_GetCppString(amx, params[1]));
+	return retval;
 }
 
 cell AMX_NATIVE_CALL Natives::DelDir(AMX* amx, cell* params) {
@@ -44,30 +48,40 @@ cell AMX_NATIVE_CALL Natives::DelDir(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	CHECK_PARAMS(2);
 
+	cell retval(0);
+
 	try {
 		fs::copy(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
 		fs::remove(amx_GetCppString(amx, params[1]));
+		retval = 1;
 	}
 	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
+		retval = 0;
 	}
-	return 0;
+	return retval;
 }
 
 cell AMX_NATIVE_CALL Natives::Copy(AMX* amx, cell* params) {
 	CHECK_PARAMS(2);
 
-	cell retval(-1);
+	cell retval(0);
 
-	fs::copy(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
-	retval = 0;
+	try {
+		fs::copy(amx_GetCppString(amx, params[1]), amx_GetCppString(amx, params[2]));
+		retval = 1;
+	}
+	catch (const fs::filesystem_error& e) {
+		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
+		retval = 0;
+	}
 	return retval;
 }
 
 cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval{0};
+	cell retval(0);
 
 	std::ofstream file(amx_GetCppString(amx, params[1]));
 
@@ -84,11 +98,13 @@ cell AMX_NATIVE_CALL Natives::CreateFile(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	std::error_code ex;
-	cell retval = fs::is_regular_file(amx_GetCppString(amx, params[1]), ex);
+	cell retval(0);
 
-	if (ex.value() != 0) {
-		logprintf("[filesystem]: Exception occurred on function %s: %s", __func__, ex.message().c_str());
+	std::error_code ec;
+	retval = fs::is_regular_file(amx_GetCppString(amx, params[1]), ec);
+
+	if (ec.value() != 0) {
+		logprintf("[Filesystem]: Exception occurred on function %s: %s", __func__, ec.message().c_str());
 	}
 	return retval;
 }
@@ -96,7 +112,7 @@ cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
 
-	cell retval{ 0 };
+	cell retval(0);
 
 	try {
 		fs::remove(amx_GetCppString(amx, params[1]));
@@ -109,7 +125,7 @@ cell AMX_NATIVE_CALL Natives::DelFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 	CHECK_PARAMS(params[0] / sizeof(cell));
-	cell retval{ 0 };
+	cell retval(0);
 	fs::copy_options mode{};
 
 	for (size_t i = 3; i <= params[0] / sizeof(cell); i++) {
@@ -144,7 +160,7 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
-	cell retval{ 0 };
+	cell retval(0);
 
 	try {
 		for (const auto& entry : fs::directory_iterator(amx_GetCppString(amx, params[1]))) {

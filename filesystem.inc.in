@@ -31,14 +31,14 @@ const MAX_PATH	= 256;
 
 // Directory Natives
 native fs_createdir(const dir[]);
-native bool:fs_dexists(const dir[]);
+native bool: fs_dexists(const dir[]);
 native fs_deldir(const dir[]);
 
 // File Natives
 native fs_fmove(const path[], const path_to[]);
 native fs_fcreate(const path[]);
 native fs_fdel(const path[]);
-native fs_fexists(const path[]);
+native bool: fs_fexists(const path[]);
 native fs_count(const path[]);
 native fs_fcopy(const path_from[], const path_to[], {CopyModes, _}:...);
 

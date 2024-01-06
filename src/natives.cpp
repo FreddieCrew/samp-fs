@@ -1,4 +1,4 @@
-﻿#include "natives.hpp"
+#include "natives.hpp"
 #include "impl.hpp"
 
 #include <iostream>
@@ -17,7 +17,12 @@ cell AMX_NATIVE_CALL Natives::Dir(AMX* amx, cell* params) {
 
 	cell retval(0);
 
-	retval = fs::create_directory(amx_GetCppString(amx, params[1]));
+	try {
+		retval = fs::create_directory(amx_GetCppString(amx, params[1]));
+	}
+	catch (const fs::filesystem_error& e) {
+		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
+	}
 	return retval;
 }
 
@@ -100,12 +105,7 @@ cell AMX_NATIVE_CALL Natives::FileExists(AMX* amx, cell* params) {
 
 	cell retval(0);
 
-	std::error_code ec;
-	retval = fs::is_regular_file(amx_GetCppString(amx, params[1]), ec);
-
-	if (ec.value() != 0) {
-		logprintf("[Filesystem]: Exception occurred on function %s: %s", __func__, ec.message().c_str());
-	}
+	retval = fs::is_regular_file(amx_GetCppString(amx, params[1]));
 	return retval;
 }
 

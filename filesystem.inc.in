@@ -33,6 +33,7 @@ const MAX_PATH	= 256;
 native fs_createdir(const dir[]);
 native bool: fs_dexists(const dir[]);
 native fs_deldir(const dir[]);
+native fs_countdirs(const path[]);
 
 // File Natives
 native fs_fmove(const path[], const path_to[]);

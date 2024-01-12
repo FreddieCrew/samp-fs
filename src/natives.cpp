@@ -1,4 +1,4 @@
-#include "natives.hpp"
+﻿#include "natives.hpp"
 #include "impl.hpp"
 
 #include <iostream>
@@ -49,6 +49,24 @@ cell AMX_NATIVE_CALL Natives::DelDir(AMX* amx, cell* params) {
 	return retval;
 }
 
+cell AMX_NATIVE_CALL Natives::CountDirs(AMX* amx, cell* params) {
+	CHECK_PARAMS(1);
+
+	cell retval(0);
+
+	try {
+		for (const auto& entry : fs::directory_iterator(amx_GetCppString(amx, params[1]))) {
+			if (fs::is_directory(entry)) {
+				retval++;
+			}
+		}
+	}
+	catch (const fs::filesystem_error& e) {
+		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
+	}
+	return retval;
+}
+
 // File functions
 cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	CHECK_PARAMS(2);
@@ -62,7 +80,6 @@ cell AMX_NATIVE_CALL Natives::Mov(AMX* amx, cell* params) {
 	}
 	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
-		retval = 0;
 	}
 	return retval;
 }
@@ -78,7 +95,6 @@ cell AMX_NATIVE_CALL Natives::Copy(AMX* amx, cell* params) {
 	}
 	catch (const fs::filesystem_error& e) {
 		logprintf("[Filesystem]: Exception occurred on %s: %s", __func__, e.what());
-		retval = 0;
 	}
 	return retval;
 }
@@ -160,6 +176,7 @@ cell AMX_NATIVE_CALL Natives::CopyFile(AMX* amx, cell* params) {
 
 cell AMX_NATIVE_CALL Natives::CountFiles(AMX* amx, cell* params) {
 	CHECK_PARAMS(1);
+
 	cell retval(0);
 
 	try {

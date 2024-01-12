@@ -70,3 +70,10 @@ A simple file system addon for SA-MP that provides several useful functions to h
 | Name       | Description                         |
 | ---------- | ----------------------------------- |
 | path       | The path where the directory to be deleted is located  |
+
+### fs_countdirs - Count how many subdirectories are in a directory
+
+| Name       | Description                         |
+| ---------- | ----------------------------------- |
+| path       | The path where the folder is located |
+| Returns    | The number of subdirectories in the specified folder |

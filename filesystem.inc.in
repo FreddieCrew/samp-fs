@@ -25,8 +25,17 @@ static enum CopyModes {
 	fs_create_hard_links
 };
 
+#if defined FS_USE_UTIL
+	#define FS_ISNONE (0)
+	#define FS_ISDIRECTORY (1)
+	#define FS_ISFILE (2)
+
+	#define FS_ERR_NONE (1)
+	#define FS_ERR (0)
+#endif
+
 // Windows maximum path length
-const MAX_PATH	= 256;
+static const MAX_PATH	= 256;
 
 
 // Directory Natives
@@ -43,3 +52,37 @@ native bool: fs_fexists(const path[]);
 native fs_count(const path[]);
 native fs_fcopy(const path_from[], const path_to[], {CopyModes, _}:...);
 
+// Utility functions
+#if defined FS_USE_UTIL
+	stock CheckIfDirectoryOrFileExists(const path[]) {
+		if (fs_fexists(path)) 
+			return FS_ISFILE;
+		else if (fs_dexists(path))
+			return FS_ISDIRECTORY
+		return FS_ISNONE;
+	}
+
+	stock CreateFileAndWrite(const path[], const content[]) {
+		new handle;
+
+		if (!fs_fexists(path)) {
+			fs_fcreate(path);
+			handle = fopen(path);
+
+			if (handle) {
+				fwrite(handle, content);
+				return FS_ERR_NONE;
+			}
+			return FS_ERR;
+		}
+
+		handle = fopen(path);
+
+		if (handle) {
+			fwrite(handle, content);
+			return FS_ERR_NONE;
+		}
+		return FS_ERR;
+	}
+
+#endif

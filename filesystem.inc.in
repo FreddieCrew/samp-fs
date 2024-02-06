@@ -12,7 +12,7 @@ public INCLUDE_VERSION	= 0x101;
 #pragma unused INCLUDE_VERSION
 
 #if defined FS_LOG_MODE
-	static const LOG_FILE	= "/fslog.txt"
+	static const LOG_FILE	= "/fs_log.txt";
 #endif
 
 // Copy Modes
@@ -40,9 +40,7 @@ static enum CopyModes {
 
 // Windows maximum path length
 static const MAX_PATH	= 256;
-
 #pragma unused MAX_PATH
-
 
 // Directory Natives
 native fs_createdir(const dir[]);

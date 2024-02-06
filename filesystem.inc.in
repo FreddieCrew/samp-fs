@@ -43,8 +43,6 @@ static const MAX_PATH	= 256;
 
 #pragma unused MAX_PATH
 
-main() {}
-
 
 // Directory Natives
 native fs_createdir(const dir[]);

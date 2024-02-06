@@ -71,6 +71,7 @@ native fs_fcopy(const path_from[], const path_to[], {CopyModes, _}:...);
 
 			if (handle) {
 				fwrite(handle, content);
+    				fclose(handle);
 				return FS_ERR_NONE;
 			}
 			return FS_ERR;
@@ -80,6 +81,7 @@ native fs_fcopy(const path_from[], const path_to[], {CopyModes, _}:...);
 
 		if (handle) {
 			fwrite(handle, content);
+   			fclose(handle);
 			return FS_ERR_NONE;
 		}
 		return FS_ERR;

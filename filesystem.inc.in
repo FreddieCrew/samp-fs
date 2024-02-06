@@ -7,22 +7,26 @@
 #define _FS_INCLUDE_included
 
 // Include version
-public INCLUDE_VERSION = 0x101;
+public INCLUDE_VERSION	= 0x101;
 
 #pragma unused INCLUDE_VERSION
 
+#if defined FS_LOG_MODE
+	static const LOG_FILE	= "/fslog.txt"
+#endif
+
 // Copy Modes
 static enum CopyModes {
-	fs_none,
-	fs_skip_existing,
-	fs_overwrite_existing,
-	fs_update_existing,
-	fs_recursive,
-	fs_copy_symlinks,
-	fs_skip_symlinks,
-	fs_directories_only,
-	fs_create_symlinks,
-	fs_create_hard_links
+    fs_none,
+    fs_skip_existing,
+    fs_overwrite_existing,
+    fs_update_existing,
+    fs_recursive,
+    fs_copy_symlinks,
+    fs_skip_symlinks,
+    fs_directories_only,
+    fs_create_symlinks,
+    fs_create_hard_links
 };
 
 #if defined FS_USE_UTIL
@@ -37,6 +41,10 @@ static enum CopyModes {
 // Windows maximum path length
 static const MAX_PATH	= 256;
 
+#pragma unused MAX_PATH
+
+main() {}
+
 
 // Directory Natives
 native fs_createdir(const dir[]);
@@ -50,41 +58,87 @@ native fs_fcreate(const path[]);
 native fs_fdel(const path[]);
 native bool: fs_fexists(const path[]);
 native fs_count(const path[]);
-native fs_fcopy(const path_from[], const path_to[], {CopyModes, _}:...);
+native fs_fcopy(const path_from[], const path_to[], {CopyModes, _} :...);
 
 // Utility functions
 #if defined FS_USE_UTIL
-	stock CheckIfDirectoryOrFileExists(const path[]) {
-		if (fs_fexists(path)) 
-			return FS_ISFILE;
-		else if (fs_dexists(path))
-			return FS_ISDIRECTORY
-		return FS_ISNONE;
+stock CheckIfDirectoryOrFileExists(const path[]) {
+    if (fs_fexists(path))
+        return FS_ISFILE;
+    else if (fs_dexists(path))
+        return FS_ISDIRECTORY
+    return FS_ISNONE;
+}
+
+stock CreateFileAndWrite(const path[], const content[]) {
+    new handle;
+
+    if (!fs_fexists(path)) {
+        fs_fcreate(path);
+        handle = fopen(path);
+
+        if (handle) {
+            fwrite(handle, content);
+            fclose(handle);
+
+			#if defined FS_LOG_MODE
+				new log[65];
+				format(log, sizeof(log), "The file was created on the path %s", path);
+				Log(log);
+			#endif
+            return FS_ERR_NONE;
+        }
+        return FS_ERR;
+    }
+
+    handle = fopen(path);
+
+    if (handle) {
+        fwrite(handle, content);
+
+		#if defined FS_LOG_MODE
+			new log[65];
+			format(log, sizeof(log), "Successfully wrote %d characters on the file %s", strlen(content), path);
+			Log(log);
+		#endif
+
+        fclose(handle);
+        return FS_ERR_NONE;
+    }
+
+	#if defined FS_LOG_MODE
+		new log[65];
+		format(log, sizeof(log), "Failed to create the file on the path %s", path);
+		Log(log);
+	#endif
+    return FS_ERR;
+}
+
+#if defined FS_LOG_MODE
+stock Log(const message[]) {
+	new log[65], year, month, day, hour, minute, second, currentdate, loghandle;
+
+	getdate(year, month, day);
+	gettime(hour, minute, second);
+
+	format(log, sizeof(log), "[%02d-%02d-%d:%02d:%02d:%02d] %s", month, day, year, hour, minute, second, message);	
+
+	if (!fs_fexists(LOG_FILE)) {
+		new retval;
+		retval = fs_fcreate(LOG_FILE);
+		return retval ? FS_ERR_NONE : FS_ERR;
 	}
 
-	stock CreateFileAndWrite(const path[], const content[]) {
-		new handle;
+	loghandle = fopen(LOG_FILE);
 
-		if (!fs_fexists(path)) {
-			fs_fcreate(path);
-			handle = fopen(path);
-
-			if (handle) {
-				fwrite(handle, content);
-    				fclose(handle);
-				return FS_ERR_NONE;
-			}
-			return FS_ERR;
-		}
-
-		handle = fopen(path);
-
-		if (handle) {
-			fwrite(handle, content);
-   			fclose(handle);
-			return FS_ERR_NONE;
-		}
-		return FS_ERR;
+	if (loghandle) {
+		fwrite(loghandle, log);
+		fclose(loghandle);
+		return FS_ERR_NONE;
 	}
+
+	return FS_ERR;
+}
+#endif
 
 #endif

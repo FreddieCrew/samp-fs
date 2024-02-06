@@ -1,8 +1,0 @@
-LIBRARY	"filesystem"
-
-EXPORTS
-	Supports
-	Load
-	Unload
-	AmxLoad
-	AmxUnload

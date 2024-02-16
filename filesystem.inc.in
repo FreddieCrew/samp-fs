@@ -7,7 +7,7 @@
 #define _FS_INCLUDE_included
 
 // Include version
-public INCLUDE_VERSION = 0x101;
+public INCLUDE_VERSION = 0x102;
 
 #pragma unused INCLUDE_VERSION
 
